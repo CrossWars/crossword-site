@@ -38,6 +38,7 @@
           :key="link.title"
           v-bind="link"
         />
+        <EntryTable/>
       </q-list>
     </q-drawer>
 
@@ -49,6 +50,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
+import EntryTable from 'components/EntryTable.vue'
 
 const linksList = [
   {
@@ -101,7 +103,8 @@ export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    EntryTable
   },
 
   setup () {

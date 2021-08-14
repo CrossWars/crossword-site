@@ -2,3 +2,7 @@
 # yarn lockfile v1
 
 
+"@byteowls/capacitor-oauth2@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@byteowls/capacitor-oauth2/-/capacitor-oauth2-3.0.0.tgz#371662a892540bdebe5d9bb2d75ed169fbbd0cf5"
+  integrity sha512-4qEHDHcpS9KXimzHS0hc9LjTAllEo/lLqencKqq68YVjIquHZdAR/aQ5cvscwd85+ge0LSwDUtmAeIGGwRie5A==
