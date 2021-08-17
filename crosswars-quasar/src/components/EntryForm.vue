@@ -3,7 +3,7 @@
     <form @submit.prevent="handleSubmit">
        <q-input 
        outlined 
-       v-model="entry.time" 
+       v-model="timeString" 
        label="Enter Your Time" 
        class="inputField"
        mask="#:##"
@@ -21,7 +21,7 @@
       label="Submit" 
       class="submitButton"
       
-      :loading="submitting">
+      :loading="loading">
         <template v-slot:loading>
           <q-spinner-dots />
         </template>
@@ -37,55 +37,49 @@ export default {
   setup() {
     const submitting = ref(false);
   },
+  props: {
+    loading: Boolean,
+  },
   methods: {
-    enterTime() {
-      console.log(this.entry.time);
-    },
-    validTime() {
-      if (this.entry.time === "") {
-        return false;
-      }
-      // check if time is a valid time: positive integer, no leading zeroes
-      var n = Math.floor(Number(this.entry.time));
-      return n !== Infinity && String(n) === this.entry.time && n >= 0;
-    },
     handleSubmit() {
       this.submitting = true;
       this.success = false;
-
-      if (!this.validTime()) {
+      let time = this.parseTime(this.timeString);
+      if (time <= 0) {
+        console.log(time);
         this.error = true;
         this.submitting = false;
         return;
       }
-      this.$emit("add:entry", this.entry);
-      this.entry = {
-        time: "",
-      };
+      this.$emit("add:entry", { time: time });
+      this.timeString = "0:00";
       this.error = false;
       this.success = true;
       this.submitting = false;
     },
     onFocus() {
-        const val = this.entry.time;
-        this.entry.time = null;
-        this.entry.time = val;
-    }
+      //should move selection caret to end, but not 100% sure if it works
+      const val = this.timeString;
+      this.timeString = null;
+      this.timeString = val;
+    },
+    parseTime(time) {
+      const mins_secs = time.split(":");
+      console.log(mins_secs);
+      const mins = parseInt(mins_secs[0]);
+      const secs = parseInt(mins_secs[1]);
+      return mins * 60 + secs;
+    },
   },
   data() {
     return {
       error: false,
       success: false,
       submitting: false,
-      entry: {
-        time: "",
-        user_id: "123456789",
-      },
+      timeString: "0:00",
     };
   },
-  computed: {
-    
-  },
+  computed: {},
 };
 </script>
 <style scoped>
@@ -105,9 +99,11 @@ form {
 
 .error-message {
   color: #d33c40;
+  margin-left: 2rem;
 }
 
 .success-message {
   color: #32a95d;
+  margin-left: 2rem;
 }
 </style>
