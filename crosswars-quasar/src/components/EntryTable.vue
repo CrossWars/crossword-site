@@ -1,29 +1,37 @@
 <template>
-  <div id="entry-table">
-    <q-table>
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Time</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="entry in entries" :key="entry.date">
-          <td>{{ entry.date }}</td>
-          <td>{{ formatTime(entry.time) }}</td>
-        </tr>
-      </tbody>
-    </q-table>
+  <div class="q-pa-md">
+    <q-table
+      title="Leaderboard"
+      :rows="entries"
+      :columns="columns"
+      row-key="name"
+    />
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-
+//check out https://codepen.io/smolinari/pen/WNQjVBN?editors=1010
+const columns = [
+  //{ name: 'pos', align: 'left', label: '#', field: 'pos', sortable: true },
+  { name: 'user_name', label: 'Name', field: row => row.user.name, align: "left"},
+  { name: 'time', label: 'Time', field: 'time', align: "left", sortable: true},
+  //{ name: 'date', label: 'Date', field: 'date' },
+  { name: 'groups', label: 'Groups', field: row => row.groups,
+   //return list of each group name
+   format: (groups, row) => groups.map((group) => group.name).join(', ')
+  }
+]
 export default defineComponent({
   name: "EntryTable",
   props: {
-    entries: Array,
+    entries: Array
+  },
+  data() {
+    return {
+      columns,
+      leaderboard_entries: []
+    }
   },
   methods: {
     formatTime(timeInSeconds) {
@@ -32,5 +40,8 @@ export default defineComponent({
       return mins + ":" + (secs < 10 ? "0" : "") + secs;
     },
   },
+  computed: {
+
+  }
 })
 </script>
